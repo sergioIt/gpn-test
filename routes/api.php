@@ -19,4 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::post('auth', 'AuthController@register');
+Route::post('auth', 'AuthController@register',[]);
+Route::get('bills', 'BillsController@getByToken')->middleware('checkToken');
+Route::get('bills/{id}/cards', 'CardsController@getByBill')->middleware('checkToken');
+Route::get('card/{id}', 'CardsController@getOneById')->middleware('checkToken');

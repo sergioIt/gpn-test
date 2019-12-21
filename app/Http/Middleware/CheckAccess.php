@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\UnauthorizedException;
 
 /**
  * слой для проверки токена
@@ -24,6 +26,17 @@ class CheckAccess
     public function handle(Request $request, Closure $next)
     {
         // @todo проверять токен с тем, что есть в сессии
+
+        if(! $token = $request->get('token')){
+
+            throw  new \InvalidArgumentException('missed token param');
+        }
+
+        if(! Cache::has($token)){
+
+            throw new UnauthorizedException('token mismatch');
+        }
+
 
         return $next($request);
     }
